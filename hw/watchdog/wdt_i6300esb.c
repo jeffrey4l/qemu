@@ -26,6 +26,9 @@
 #include "sysemu/watchdog.h"
 #include "hw/hw.h"
 #include "hw/pci/pci.h"
+#include "qapi/error.h"
+#include "qapi/qapi-commands-run-state.h"
+#include "qapi/qapi-events-run-state.h"
 
 /*#define I6300ESB_DEBUG 1*/
 
@@ -116,6 +119,7 @@ static void i6300esb_restart_timer(I6300State *d, int stage)
 
     if (!d->enabled)
         return;
+    qapi_event_send_watchdog(WATCHDOG_ACTION_DEBUG, &error_abort);
 
     d->stage = stage;
 
